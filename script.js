@@ -3,10 +3,7 @@ let form = document.querySelector("form");
 
 form.addEventListener("submit", function(dets){
     dets.preventDefault();
-
-    if(nm.ariaValueMax.length <= 2){
-        document.querySelector("#hide").computedStyleMap.display ="initial";
-    }else{
-        document.querySelector("#hide").computedStyleMap.display="none";
-    }
+   let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+   let ans = emailRegex.test("harsh@test.com");
+   console.log(ans);
 })
