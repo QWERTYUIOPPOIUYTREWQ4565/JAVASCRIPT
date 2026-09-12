@@ -1,20 +1,13 @@
-let a  = document.querySelector(".a")
-let b  = document.querySelector(".b")
-let c  = document.querySelector(".c")
-let btn = document.querySelector("button");
+let inp = document.querySelector("input");
+let span = document.querySelector("span");
 
-btn.addEventListener("click",function(){
-    console.log("button clicked");
+inp.addEventListener("input",function(){
+    let left = 20 - inp.value.length;
+    span.textContent = left;
+
+    if(left < 0){
+         span.style.color = "red";
+    }else{
+        span.style.color = "pink";
+    }
 });
-
-c.addEventListener("click",function(){
-    console.log("c clicked");
-},true);//captures
-
-b.addEventListener("click",function(){
-    console.log("b clicked");
-});
-
-a.addEventListener("click",function(){
-    console.log("a clicked");
-},true);//captures
