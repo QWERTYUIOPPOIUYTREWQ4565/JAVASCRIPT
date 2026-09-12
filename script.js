@@ -1,7 +1,6 @@
-let abcd = document.querySelector("#abcd");
+let form = document.querySelector("form");
 
-window.addEventListener("mousemove",function(dets){
-    abcd.style.top = dets.clientY + "px";
-    abcd.style.left = dets.clientX + "px";
+form.addEventListener("submit",function(dets){
+    dets.preventDefault();
 
 });
