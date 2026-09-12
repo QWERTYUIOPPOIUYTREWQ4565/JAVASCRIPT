@@ -1,6 +1,3 @@
-let form = document.querySelector("form");
-
-form.addEventListener("submit",function(dets){
-    dets.preventDefault();
-
+document.querySelector("#nav").addEventListener("click",function(){
+    alert("clicked");
 });
