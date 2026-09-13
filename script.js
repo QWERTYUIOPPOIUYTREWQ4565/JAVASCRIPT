@@ -1,10 +1,16 @@
-//making a counter in js.
-let count = 10;
+let count = 0;
+let seconds = 5;
+let progress = document.querySelector(".progress-bar");
+let percentText = document.querySelector("#percentText");
+let heading = document.querySelector("h2");
 
-let interval = setInterval(function(){
-    if(count >= 1){ 
-        count--;
-    console.log(count);
+let download = setInterval(function () {
+    if (count < 100) {
+        count++;
+        progress.style.width = `${count}%`;
+        percentText.textContent = `${count}%`;
+    } else {
+       document.querySelector("h1").textContent = "Downloaded."
+        clearInterval(download);
     }
-    else clearInterval(interval);
-}, 1000);
+}, (seconds * 1000) / 100);
