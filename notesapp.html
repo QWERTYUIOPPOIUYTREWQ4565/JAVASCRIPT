@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Card Stack</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            background: #252525;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            position: relative;
+            width: 340px;
+            height: 260px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* LEFT CONTROLS */
+        .controls {
+            position: absolute;
+            left: 0;
+            top: 35px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .controls button {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid #383838;
+            background: #1e1e1e;
+            color: #888;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+
+        .controls button:hover {
+            color: #fff;
+            background: #2a2a2a;
+        }
+
+        /* CARD STACK */
+        .stack {
+            position: absolute;
+            left: 48px;
+            top: 0;
+            width: 230px;
+            height: 185px;
+        }
+
+        .card {
+            position: absolute;
+            width: 230px;
+            height: 175px;
+            padding: 16px;
+            background: #232323;
+            border: 1px solid #333;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        /* Layering cards downward like instructor's preview */
+        .card:nth-child(1) { z-index: 4; top: 0; transform: scale(1); }
+        .card:nth-child(2) { z-index: 3; top: 8px; transform: scale(0.97); opacity: 0.8; }
+        .card:nth-child(3) { z-index: 2; top: 16px; transform: scale(0.94); opacity: 0.6; }
+        .card:nth-child(4) { z-index: 1; top: 24px; transform: scale(0.91); opacity: 0.4; }
+
+        /* TOP SECTION */
+        .top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #e87519;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            overflow: hidden;
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* ROWS */
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+        }
+
+        .label { color: #888; }
+        .value { color: #ddd; font-weight: 500; }
+
+        /* ACTIONS */
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .btn-primary {
+            border: none;
+            border-radius: 20px;
+            padding: 6px 14px;
+            background: #111;
+            color: #fff;
+            font-size: 11px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .btn-secondary {
+            border: none;
+            background: transparent;
+            color: #aaa;
+            font-size: 11px;
+            cursor: pointer;
+            padding: 4px 6px;
+        }
+
+        .btn-secondary:hover { color: #fff; }
+
+        /* RIGHT DOTS */
+        .dots {
+            position: absolute;
+            right: 10px;
+            top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+        }
+
+        .dot:nth-child(1) { background: #111; }
+        .dot:nth-child(2) { background: #350070; }
+        .dot:nth-child(3) { background: #6b2b00; }
+        .dot:nth-child(4) { background: #1da78e; }
+
+        /* ADD INPUT */
+        .add {
+            position: absolute;
+            bottom: 0;
+            left: 48px;
+            width: 230px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .add input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #333;
+            border-radius: 10px;
+            outline: none;
+            background: #1a1a1a;
+            color: white;
+            font-size: 11px;
+        }
+
+        .add button {
+            border: none;
+            border-radius: 10px;
+            padding: 0 12px;
+            background: #fff;
+            color: #000;
+            font-weight: 600;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        /* MODAL FORM CONTAINER STYLES */
+        .form-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .form-card {
+            background: #ffffff;
+            color: #1a1a1a;
+            width: 100%;
+            max-width: 420px;
+            border-radius: 24px;
+            padding: 28px 24px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .form-card h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #000;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="url"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 14px;
+            font-size: 13px;
+            outline: none;
+            color: #333;
+            background: #fff;
+        }
+
+        .form-group input::placeholder {
+            color: #a0aec0;
+        }
+
+        /* CATEGORY PILLS */
+        .categories-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .pill-checkbox {
+            display: none;
+        }
+
+        .pill-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1.5px solid transparent;
+            user-select: none;
+        }
+
+        .pill-emergency { border-color: #a73350; color: #a73350; }
+        .pill-important { border-color: #d9822b; color: #d9822b; }
+        .pill-urgent { border-color: #6b3ba7; color: #6b3ba7; }
+        .pill-norush { border-color: #a0aec0; color: #718096; }
+
+        .custom-box {
+            width: 14px;
+            height: 14px;
+            border: 1.5px solid currentColor;
+            border-radius: 3px;
+            display: inline-block;
+            position: relative;
+        }
+
+        .pill-checkbox:checked + .pill-label .custom-box::after {
+            content: '';
+            position: absolute;
+            left: 3px;
+            top: 0px;
+            width: 4px;
+            height: 8px;
+            border: solid currentColor;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .btn-create {
+            width: 100%;
+            padding: 14px;
+            background: #18181b;
+            color: #ffffff;
+            border: none;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 24px;
+            margin-bottom: 10px;
+        }
+
+        .closeForm {
+            width: 100%;
+            padding: 14px;
+            background: #ff3b5c;
+            color: #ffffff;
+            border: none;
+            border-radius: 24px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="controls">
+            <button id="addNote">+</button>
+            <button id="upBtn">↑</button>
+            <button id="downBtn">↓</button>
+        </div>
+
+        <div class="stack" id="stack"></div>
+
+        <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+
+        <div class="add">
+            <input type="text" id="todoInput" placeholder="Add todo...">
+            <button id="addTodo">Add</button>
+        </div>
+    </div>
+
+    <!-- FORM MODAL -->
+    <div class="form-container" id="formContainer">
+        <div class="form-card">
+            <h2>New Call</h2>
+            <form id="noteForm">
+                <div class="form-group">
+                    <label>Image URL</label>
+                    <input id="imageInput" type="url" placeholder="https://example.com/photo.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input id="fullNameInput" type="text" placeholder="Enter full name">
+                </div>
+
+                <div class="form-group">
+                    <label>Home Town</label>
+                    <input id="homeTownInput" type="text" placeholder="Enter home town">
+                </div>
+
+                <div class="form-group">
+                    <label>Purpose</label>
+                    <input id="purposeInput" type="text" placeholder="e.g., Quick appointment note">
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <div class="categories-grid">
+                        <label>
+                            <input type="checkbox" value="Emergency" class="pill-checkbox">
+                            <span class="pill-label pill-emergency"><span class="custom-box"></span> Emergency</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" value="Important" class="pill-checkbox">
+                            <span class="pill-label pill-important"><span class="custom-box"></span> Important</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" value="Urgent" class="pill-checkbox">
+                            <span class="pill-label pill-urgent"><span class="custom-box"></span> Urgent</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" value="No Rush" class="pill-checkbox">
+                            <span class="pill-label pill-norush"><span class="custom-box"></span> No Rush</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-create">Create Note</button>
+                <button type="button" class="closeForm">Close</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // DOM SELECTION
+        let addNote = document.querySelector("#addNote");
+        let formContainer = document.querySelector("#formContainer");
+        let closeForm = document.querySelector(".closeForm");
+        const noteForm = document.querySelector("#noteForm");
+
+        const imageInput = document.querySelector("#imageInput");
+        const fullNameInput = document.querySelector("#fullNameInput");
+        const homeTownInput = document.querySelector("#homeTownInput");
+        const purposeInput = document.querySelector("#purposeInput");
+        const categoryCheckboxes = noteForm.querySelectorAll(".pill-checkbox");
+
+        let stack = document.querySelector("#stack");
+        let upBtn = document.querySelector("#upBtn");
+        let downBtn = document.querySelector("#downBtn");
+        let todoInput = document.querySelector("#todoInput");
+        let addTodo = document.querySelector("#addTodo");
+
+        // INITIAL TASKS / LOCAL STORAGE RETRIEVAL
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [
+            { fullName: "Complete JavaScript", selected: "Learning", purpose: "Today", imageUrl: "", homeTown: "Ranchi" },
+            { fullName: "Practice DSA", selected: "Coding", purpose: "3 tasks", imageUrl: "", homeTown: "Delhi" },
+            { fullName: "Build Project", selected: "Project", purpose: "Pending", imageUrl: "", homeTown: "Mumbai" },
+            { fullName: "Push to GitHub", selected: "Work", purpose: "Pending", imageUrl: "", homeTown: "Bangalore" }
+        ];
+
+        let currentIndex = 0;
+
+        function saveToLocalStorage(obj) {
+            let oldTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+            oldTasks.push(obj);
+            localStorage.setItem("tasks", JSON.stringify(oldTasks));
+        }
+
+        function showCards() {
+            stack.innerHTML = "";
+            if (tasks.length === 0) return;
+
+            let displayCount = Math.min(4, tasks.length);
+
+            for (let i = 0; i < displayCount; i++) {
+                let index = (currentIndex + i) % tasks.length;
+                let todo = tasks[index];
+                let card = document.createElement("div");
+                card.classList.add("card");
+
+                let top = document.createElement("div");
+                top.classList.add("top");
+
+                let avatar = document.createElement("div");
+                avatar.classList.add("avatar");
+
+                if (todo.imageUrl) {
+                    let img = document.createElement("img");
+                    img.src = todo.imageUrl;
+                    img.alt = "avatar";
+                    avatar.appendChild(img);
+                } else {
+                    avatar.textContent = todo.fullName ? todo.fullName.charAt(0).toUpperCase() : "?";
+                }
+
+                let title = document.createElement("div");
+                title.classList.add("title");
+                title.textContent = todo.fullName;
+
+                top.appendChild(avatar);
+                top.appendChild(title);
+
+                let rowCategory = document.createElement("div");
+                rowCategory.classList.add("row");
+
+                let categoryLabel = document.createElement("span");
+                categoryLabel.classList.add("label");
+                categoryLabel.textContent = "Category";
+
+                let categoryValue = document.createElement("span");
+                categoryValue.classList.add("value");
+                categoryValue.textContent = todo.selected || "N/A";
+
+                rowCategory.appendChild(categoryLabel);
+                rowCategory.appendChild(categoryValue);
+
+                let rowPurpose = document.createElement("div");
+                rowPurpose.classList.add("row");
+
+                let purposeLabel = document.createElement("span");
+                purposeLabel.classList.add("label");
+                purposeLabel.textContent = "Purpose";
+
+                let purposeValue = document.createElement("span");
+                purposeValue.classList.add("value");
+                purposeValue.textContent = todo.purpose || "N/A";
+
+                rowPurpose.appendChild(purposeLabel);
+                rowPurpose.appendChild(purposeValue);
+
+                let actions = document.createElement("div");
+                actions.classList.add("actions");
+
+                let btnPrimary = document.createElement("button");
+                btnPrimary.classList.add("btn-primary");
+                btnPrimary.textContent = "✓ Complete";
+
+                let btnSecondary = document.createElement("button");
+                btnSecondary.classList.add("btn-secondary");
+                btnSecondary.textContent = "Edit";
+
+                actions.appendChild(btnPrimary);
+                actions.appendChild(btnSecondary);
+
+                card.appendChild(top);
+                card.appendChild(rowCategory);
+                card.appendChild(rowPurpose);
+                card.appendChild(actions);
+
+                stack.appendChild(card);
+            }
+        }
+
+        upBtn.addEventListener("click", () => {
+            if (tasks.length === 0) return;
+            currentIndex = (currentIndex - 1 + tasks.length) % tasks.length;
+            showCards();
+        });
+
+        downBtn.addEventListener("click", () => {
+            if (tasks.length === 0) return;
+            currentIndex = (currentIndex + 1) % tasks.length;
+            showCards();
+        });
+
+        addNote.addEventListener("click", function() {
+            formContainer.style.display = "flex";
+        });
+
+        closeForm.addEventListener("click", function() {
+            formContainer.style.display = "none";
+        });
+
+        formContainer.addEventListener("click", function(e) {
+            if (e.target === formContainer) {
+                formContainer.style.display = "none";
+            }
+        });
+
+        noteForm.addEventListener("submit", function(evt) {
+            evt.preventDefault();
+
+            const imageUrl = imageInput.value.trim();
+            const fullName = fullNameInput.value.trim();
+            const homeTown = homeTownInput.value.trim();
+            const purpose = purposeInput.value.trim();
+
+            let selected = false;
+            categoryCheckboxes.forEach(function(cat) {
+                if (cat.checked) {
+                    selected = cat.value;
+                }
+            });
+
+            if (imageUrl === "") {
+                alert("Please enter an Image URL.");
+                return;
+            }
+
+            if (fullName === "") {
+                alert("Please enter your Full Name.");
+                return;
+            }
+
+            if (homeTown === "") {
+                alert("Please enter your Home Town.");
+                return;
+            }
+
+            if (purpose === "") {
+                alert("Please enter your Purpose.");
+                return;
+            }
+
+            if (!selected) {
+                alert("Please select a category.");
+                return;
+            }
+
+            let newObj = {
+                imageUrl,
+                fullName,
+                purpose,
+                homeTown,
+                selected
+            };
+
+            // Save to LocalStorage
+            saveToLocalStorage(newObj);
+
+            // Update local array & UI
+            tasks.push(newObj);
+            currentIndex = tasks.length - 1;
+            showCards();
+
+            // Reset form and close modal
+            noteForm.reset();
+            formContainer.style.display = "none";
+        });
+
+        addTodo.addEventListener("click", () => {
+            let value = todoInput.value.trim();
+            if (!value) return;
+
+            let newObj = {
+                fullName: value,
+                selected: "Personal",
+                purpose: "Pending",
+                imageUrl: "",
+                homeTown: "N/A"
+            };
+
+            saveToLocalStorage(newObj);
+            tasks.push(newObj);
+            todoInput.value = "";
+            showCards();
+        });
+
+        showCards();
+    </script>
+</body>
+</html>
