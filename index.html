@@ -1,35 +1,40 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Theme Toggle</title>
+    <title>User Cards</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
     <main class="container">
+        <input
+            id="searchInput"
+            type="text"
+            placeholder="Search..."
+        >
 
-        <section class="theme-card">
+        <div class="cards">
+            <div class="card">
+                <img
+                    class="bg-img"
+                    src="https://images.unsplash.com/photo-1788029489729-73228e7b5c4a?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    alt="User profile background"
+                >
 
-            <h1>Theme Preference</h1>
+                <div class="blurred-layer"></div>
 
-            <p>Choose your preferred appearance.</p>
-
-            <button id="toggleTheme" type="button">
-                Toggle Theme
-            </button>
-
-        </section>
-
+                <div class="content">
+                    <h3>User 123</h3>
+                    <p>
+                        Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                        Repudiandae quos sequi omnis temporibus dignissimos.
+                    </p>
+                </div>
+            </div>
+        </div>
     </main>
 
     <script src="script.js"></script>
-
 </body>
-
 </html>
-
