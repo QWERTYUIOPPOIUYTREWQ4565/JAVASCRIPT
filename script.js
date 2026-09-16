@@ -1,4 +1,3 @@
-
 let users = [
     {
         name: "amisha rathore",
@@ -49,9 +48,13 @@ function showUsers(arr) {
 
     cards.innerHTML = "";
 
+    if(arr.length === 0){
+        cards.innerHTML = "<h2>No Users Found</h2>";
+        return;
+    }
     arr.forEach(function (user) {
 
-        let card = document.createElement("div");
+     let card = document.createElement("div");
         card.classList.add("card");
 
         let img = document.createElement("img");
