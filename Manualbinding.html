@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add User</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    /* Form Card Container */
+    .form-container {
+      background-color: #1e1e1e;
+      width: 100%;
+      max-width: 440px;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      margin-bottom: 40px;
+      border: 1px solid #2a2a2a;
+    }
+
+    .form-container h2 {
+      text-align: center;
+      font-size: 1.6rem;
+      margin-bottom: 24px;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      color: #cccccc;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      background-color: #333333;
+      border: 1px solid #444444;
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: #666666;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    button[type="submit"] {
+      width: 100%;
+      padding: 12px;
+      background-color: #2a2a2a;
+      color: #ffffff;
+      border: 1px solid #444444;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.2s, border-color 0.2s;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #383838;
+      border-color: #555555;
+    }
+
+    /* Users List Grid */
+    .users-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .user-card {
+      background-color: #1e1e1e;
+      border: 1px solid #2a2a2a;
+      border-radius: 16px;
+      padding: 24px 20px;
+      width: 260px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .user-card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 16px;
+    }
+
+    .user-card h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .user-card .role {
+      font-size: 0.85rem;
+      color: #aaaaaa;
+      margin-bottom: 12px;
+    }
+
+    .user-card .bio {
+      font-size: 0.85rem;
+      color: #dddddd;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Form Section -->
+  <div class="form-container">
+    <h2>Add User</h2>
+    <form id="userForm">
+      <div class="form-group">
+        <label for="username">Name</label>
+        <input type="text" id="username" required placeholder="Enter name">
+      </div>
+
+      <div class="form-group">
+        <label for="role">Role</label>
+        <input type="text" id="role" required placeholder="Enter role">
+      </div>
+
+      <div class="form-group">
+        <label for="bio">Bio</label>
+        <textarea id="bio" required placeholder="Enter bio"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="photoUrl">Photo URL</label>
+        <input type="url" id="photoUrl" placeholder="Enter image URL">
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <!-- Cards Display Section -->
+  <div class="users-container" id="usersList">
+    <!-- Initial Cards matching the image -->
+    <div class="user-card">
+      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" alt="John Doe">
+      <h3>John Doe</h3>
+      <div class="role">Frontend Developer</div>
+      <div class="bio">Loves building beautiful UIs and learning new technologies.</div>
+    </div>
+
+    <div class="user-card">
+      <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200" alt="Jane Smith">
+      <h3>Jane Smith</h3>
+      <div class="role">Backend Engineer</div>
+      <div class="bio">Enjoys solving complex problems and optimizing APIs.</div>
+    </div>
+
+    <div class="user-card">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200" alt="Alex Lee">
+      <h3>Alex Lee</h3>
+      <div class="role">UI/UX Designer</div>
+      <div class="bio">Passionate about user experience and clean design.</div>
+    </div>
+  </div>
+
+  <!-- Updated JavaScript Script -->
+  <script>
+    const form = document.querySelector("#userForm");
+    const username = document.querySelector("#username");
+    const role = document.querySelector("#role");
+    const bio = document.querySelector("#bio");
+    const photoUrl = document.querySelector("#photoUrl");
+    const usersList = document.querySelector("#usersList");
+
+    const userManager = {
+      users: [],
+      init: function() {
+        form.addEventListener("submit", this.submitForm.bind(this));
+      },
+      submitForm: function(e) {
+        e.preventDefault();
+        
+        const newUser = {
+          username: username.value,
+          role: role.value,
+          bio: bio.value,
+          photoUrl: photoUrl.value || "https://via.placeholder.com/150"
+        };
+
+        this.users.push(newUser);
+        this.addUser(newUser);
+        
+        form.reset();
+      },
+      addUser: function(user) {
+        const card = document.createElement("div");
+        card.className = "user-card";
+        card.innerHTML = `
+          <img src="${user.photoUrl}" alt="${user.username}" onerror="this.src='https://via.placeholder.com/150'">
+          <h3>${user.username}</h3>
+          <div class="role">${user.role}</div>
+          <div class="bio">${user.bio}</div>
+        `;
+        usersList.appendChild(card);
+      },
+      removeUser: function(index) {
+        this.users.splice(index, 1);
+      }
+    };
+
+    userManager.init();
+  </script>
+
+</body>
+</html>
