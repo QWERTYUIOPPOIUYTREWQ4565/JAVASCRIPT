@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intersection Observer Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      background-color: #f4f4f9;
+    }
+
+    h1 {
+      margin-top: 40px;
+      color: #333;
+    }
+
+    /* Spacer to create scroll distance between images */
+    .spacer {
+      height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #888;
+      font-style: italic;
+    }
+
+    /* Base styles for lazy-loaded images */
+    img {
+      width: 80%;
+      max-width: 600px;
+      height: 350px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      background-color: #e0e0e0; /* Placeholder background color */
+
+      /* Initial hidden/blur state */
+      opacity: 0.3;
+      filter: blur(8px);
+      transition: opacity 0.6s ease-in-out, filter 0.6s ease-in-out;
+    }
+
+    /* Class added by your JS when image intersects and loads */
+    img.loaded {
+      opacity: 1;
+      filter: blur(0);
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Intersection Observer Demo</h1>
+
+  <div class="spacer">Scroll down to see images lazy load...</div>
+
+  <!-- Image 1 -->
+  <img 
+    src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='350'></svg>" 
+    data-src="https://picsum.photos/600/350?random=1" 
+    alt="Sample Image 1">
+
+  <div class="spacer">Keep scrolling...</div>
+
+  <!-- Image 2 -->
+  <img 
+    src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='350'></svg>" 
+    data-src="https://picsum.photos/600/350?random=2" 
+    alt="Sample Image 2">
+
+  <div class="spacer">Keep scrolling...</div>
+
+  <!-- Image 3 -->
+  <img 
+    src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='350'></svg>" 
+    data-src="https://picsum.photos/600/350?random=3" 
+    alt="Sample Image 3">
+
+  <div class="spacer">Almost there...</div>
+
+  <!-- Image 4 -->
+  <img 
+    src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='350'></svg>" 
+    data-src="https://picsum.photos/600/350?random=4" 
+    alt="Sample Image 4">
+
+  <div class="spacer">End of Page</div>
+<script src ="IntersectionObserver.js"></script>
+</body>
+</html>
